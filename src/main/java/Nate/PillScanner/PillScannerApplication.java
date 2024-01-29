@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories
 @EntityScan
-public class PillScannerApplication {
+public class PillScannerApplication {       
 
 	public static void main(String[] args) {
 		SpringApplication.run(PillScannerApplication.class, args);

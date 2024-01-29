@@ -21,6 +21,9 @@ public class Shipment {
     @Column
     Long quantity;
 
+   @Column
+   String time;
+
     //for grouping together shipments
     private Long groupId;
 }

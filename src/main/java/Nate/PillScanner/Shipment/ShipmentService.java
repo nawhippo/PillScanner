@@ -3,9 +3,10 @@ import Nate.PillScanner.Drug.Drug;
 import Nate.PillScanner.Drug.DrugService;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Date;
 @Service
 public class ShipmentService {
     private final ShipmentRepository shipmentRepository;
@@ -44,7 +45,10 @@ public class ShipmentService {
             drug.setSupply(drug.getSupply() + shipment.getQuantity());
             drugService.saveDrug(drug);
         }
-
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = dateFormat.format(date);
+        shipment.setTime(dateString);
         return saveShipment(shipment);
     }
 
