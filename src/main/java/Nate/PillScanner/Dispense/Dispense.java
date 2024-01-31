@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -18,17 +20,23 @@ public class Dispense {
     private Long id;
 
     @Column
-    private Long nurse1;
+    private String nurse1;
 
     @Column
-    private Long nurse2;
+    private String nurse2;
 
     @Column
     private Long drugId;
 
     @Column
-    private Date time;
+    private String meal;
+
+    @Column
+    private LocalDateTime dispenseTime;
 
     @Column
     private Long quantity;
+
+    @Column
+    private boolean dispensed;
 }

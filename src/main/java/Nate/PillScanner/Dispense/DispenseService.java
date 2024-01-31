@@ -1,22 +1,30 @@
 package Nate.PillScanner.Dispense;
 
 import Nate.PillScanner.Drug.Drug;
+import Nate.PillScanner.Drug.DrugRepository;
 import Nate.PillScanner.Drug.DrugService;
-import Nate.PillScanner.Shipment.Shipment;
+import Nate.PillScanner.DrugRelationship.DrugRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
 public class DispenseService {
 
     private final DispenseRepository dispenseRepository;
+    private final DrugRepository drugRepository;
     private final DrugService drugService;
 
     @Autowired
-    public DispenseService(DispenseRepository dispenseRepository, DrugService drugService) {
+    public DispenseService(DispenseRepository dispenseRepository, DrugRepository drugRepository, DrugService drugService) {
         this.dispenseRepository = dispenseRepository;
+        this.drugRepository = drugRepository;
         this.drugService = drugService;
     }
 
@@ -32,24 +40,39 @@ public class DispenseService {
         return dispenseRepository.findById(id);
     }
 
-    public Dispense updateDispense(Dispense dispense) {
-        return dispenseRepository.save(dispense);
-    }
+
 
     public void deleteDispense(Long id) {
         dispenseRepository.deleteById(id);
     }
 
 
-    public Dispense createDispense(Dispense dispense) {
-        Optional<Drug> optionalDrug = drugService.findDrugById(dispense.getDrugId());
-
-        if (optionalDrug.isPresent()) {
-            Drug drug = optionalDrug.get();
-            drug.setSupply(drug.getSupply() - dispense.getQuantity());
-            drugService.saveDrug(drug);
-        }
-
+    public Dispense createDispense(DrugRelationship drugRelationship) {
+        Dispense dispense = new Dispense();
+        Drug drug = drugService.findDrugById(drugRelationship.getDrugId())
+                .orElseThrow(() -> new NoSuchElementException("Drug not found"));
+        dispense.setDrugId(drug.getId());
+        dispense.setMeal(drugRelationship.getMeal());
+        dispense.setQuantity(drugRelationship.getQuantity());
+        dispense.setDispensed(false);
         return saveDispense(dispense);
     }
+
+    public Dispense confirmDispense(Dispense dispense) {
+        Drug drug = drugRepository.findById(dispense.getDrugId())
+                .orElseThrow(() -> new NoSuchElementException("Drug not found"));
+        drug.setSupply(drug.getSupply() - dispense.getQuantity());
+        dispense.setDispensed(true);
+        dispense.setDispenseTime(LocalDateTime.now());
+        drugRepository.save(drug);
+        return dispenseRepository.save(dispense);
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void resetDispensedStatus() {
+        dispenseRepository.resetAllDispensedStatus();
+    }
+
+
 }

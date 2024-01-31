@@ -19,11 +19,17 @@ public class DrugRelationship {
     Long id;
 
     @Column
-    String time;
+    String meal;
 
     @Column
     Long camperId;
 
     @Column
     Long drugId;
+
+    @Column
+    String time;
+
+    @Column
+    Long quantity;
 }

@@ -35,9 +35,9 @@ public class DispenseController {
         return ResponseEntity.ok(dispense);
     }
 
-    @PutMapping("/updateDispense")
-    public ResponseEntity<Dispense> updateDispense(@RequestBody Dispense dispense) {
-        Dispense updatedDispense = dispenseService.updateDispense(dispense);
+    @PutMapping("/confirmDispense")
+    public ResponseEntity<Dispense> confirmDispense(@RequestBody Dispense dispense) {
+        Dispense updatedDispense = dispenseService.confirmDispense(dispense);
         return ResponseEntity.ok(updatedDispense);
     }
 
