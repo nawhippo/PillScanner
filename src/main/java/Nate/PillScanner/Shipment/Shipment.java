@@ -21,6 +21,13 @@ public class Shipment {
     @Column
     Long quantity;
 
+    @Column
+    private String nurse1;
+
+    @Column
+    private String nurse2;
+
+
    @Column
    String time;
 

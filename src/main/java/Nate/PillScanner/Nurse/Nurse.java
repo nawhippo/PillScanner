@@ -1,5 +1,6 @@
 package Nate.PillScanner.Nurse;
 
+import Nate.PillScanner.Security.VerifyToken;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +10,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.management.relation.Role;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @AllArgsConstructor
@@ -28,19 +33,43 @@ public class Nurse implements UserDetails {
     @Column
     private String lastName;
 
-    @Column
-    private String Email;
+    @Column(unique = true)
+    private String email;
 
     @Column
     private String password;
 
     @Column
+    private String otp;
+
+    @Column
     private String username;
+
+
+    @Column
+    private Long verifyTokenId;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_NURSE"));
+        // Return authorities based on the roles
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
+
+    public void addRole(String role) {
+        this.roles.add(role);
+    }
+
+    public void removeRole(String role) {
+        this.roles.remove(role);
+    }
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles = new HashSet<>();
+
+
 
     @Override
     public boolean isAccountNonExpired() {

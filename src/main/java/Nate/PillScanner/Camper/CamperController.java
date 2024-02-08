@@ -1,5 +1,6 @@
 package Nate.PillScanner.Camper;
 
+import Nate.PillScanner.Drug.Drug;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/camper")
@@ -28,6 +30,12 @@ public class CamperController {
     public ResponseEntity<Void> deleteCamper(@RequestBody Camper camper) {
         camperService.deleteCamper(camper.getId());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/getCamper/{camperId}")
+    public ResponseEntity<Optional<Camper>> getDrug(@PathVariable Long camperId) {
+        Optional<Camper> outputCamper = camperService.findCamperById(camperId);
+        return ResponseEntity.ok(outputCamper);
     }
 
     @GetMapping("/getAllCampers")

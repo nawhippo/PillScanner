@@ -20,12 +20,6 @@ public class Dispense {
     private Long id;
 
     @Column
-    private String nurse1;
-
-    @Column
-    private String nurse2;
-
-    @Column
     private Long drugId;
 
     @Column
@@ -39,4 +33,7 @@ public class Dispense {
 
     @Column
     private boolean dispensed;
+
+    @Column
+    private boolean missed;
 }

@@ -1,5 +1,7 @@
 package Nate.PillScanner.Dispense;
 
+import Nate.PillScanner.Alert.Alert;
+import Nate.PillScanner.Alert.AlertRepository;
 import Nate.PillScanner.Drug.Drug;
 import Nate.PillScanner.Drug.DrugRepository;
 import Nate.PillScanner.Drug.DrugService;
@@ -21,11 +23,13 @@ public class DispenseService {
     private final DrugRepository drugRepository;
     private final DrugService drugService;
 
+    private final AlertRepository alertRepository;
     @Autowired
-    public DispenseService(DispenseRepository dispenseRepository, DrugRepository drugRepository, DrugService drugService) {
+    public DispenseService(DispenseRepository dispenseRepository, DrugRepository drugRepository, DrugService drugService, AlertRepository alertRepository) {
         this.dispenseRepository = dispenseRepository;
         this.drugRepository = drugRepository;
         this.drugService = drugService;
+        this.alertRepository = alertRepository;
     }
 
     public Dispense saveDispense(Dispense dispense) {
@@ -40,7 +44,13 @@ public class DispenseService {
         return dispenseRepository.findById(id);
     }
 
+    public List<Dispense> findAllDispensed() {
+        return dispenseRepository.findByDispensedTrue();
+    }
 
+    public List<Dispense> findAllNonDispensed() {
+        return dispenseRepository.findByDispensedTrue();
+    }
 
     public void deleteDispense(Long id) {
         dispenseRepository.deleteById(id);
@@ -65,6 +75,13 @@ public class DispenseService {
         dispense.setDispensed(true);
         dispense.setDispenseTime(LocalDateTime.now());
         drugRepository.save(drug);
+        if(drug.getSupply() <= 25){
+            Alert alert = new Alert();
+            alert.setObjectId(drug.getId());
+            alert.setType("Drug");
+            alert.setDescription("Supply of 25 or Less");
+            alertRepository.save(alert);
+        }
         return dispenseRepository.save(dispense);
     }
 

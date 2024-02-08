@@ -46,4 +46,17 @@ public class DispenseController {
         dispenseService.deleteDispense(dispenseId);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping("/dispensed")
+    public ResponseEntity<List<Dispense>> findAllDispensed() {
+        List<Dispense> dispensed = dispenseService.findAllDispensed();
+        return ResponseEntity.ok(dispensed);
+    }
+
+    @GetMapping("/nonDispensed")
+    public ResponseEntity<List<Dispense>> findAllNonDispensed() {
+        List<Dispense> nonDispensed = dispenseService.findAllNonDispensed();
+        return ResponseEntity.ok(nonDispensed);
+    }
 }

@@ -1,5 +1,7 @@
 package Nate.PillScanner.Nurse;
 
+import Nate.PillScanner.Security.EmailVerificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,9 +13,12 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/nurse")
 public class NurseController {
+    @Autowired
     private final NurseService nurseService;
-
-    public NurseController(NurseService nurseService) {
+    @Autowired
+    private final EmailVerificationService emailVerificationService;
+    public NurseController(NurseService nurseService, EmailVerificationService emailVerificationService) {
+        this.emailVerificationService = emailVerificationService;
         this.nurseService = nurseService;
     }
 
@@ -50,4 +55,21 @@ public class NurseController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/verifyEmail")
+    public ResponseEntity<Void> verifyEmail(@RequestParam("token") String token) {
+        return emailVerificationService.verifyUser(token);
+    }
+
+    @PostMapping("/initiateVerification")
+    public ResponseEntity<Void> initiateVerification(@RequestParam("email") String email) {
+        return emailVerificationService.sendEmailWithToken(email, "verify");
+    }
+
+    @PostMapping("/initiateRecovery")
+    public ResponseEntity<Void> initiateRecovery(@RequestParam("email") String email) {
+        return emailVerificationService.sendEmailWithToken(email, "recover");
+    }
+
+
 }
