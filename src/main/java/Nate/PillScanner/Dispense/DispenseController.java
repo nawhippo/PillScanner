@@ -1,5 +1,6 @@
 package Nate.PillScanner.Dispense;
 
+import Nate.PillScanner.Nurse.Nurse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,11 @@ import java.util.Optional;
 @RequestMapping("/dispense")
 public class DispenseController {
     private final DispenseService dispenseService;
-
+    private final DispenseGenerationService dispenseGenerationService;
     @Autowired
-    public DispenseController(DispenseService dispenseService) {
+    public DispenseController(DispenseService dispenseService, DispenseGenerationService dispenseGenerationService) {
         this.dispenseService = dispenseService;
+        this.dispenseGenerationService = dispenseGenerationService;
     }
 
     @PostMapping("/createDispense")
@@ -36,8 +38,8 @@ public class DispenseController {
     }
 
     @PutMapping("/confirmDispense")
-    public ResponseEntity<Dispense> confirmDispense(@RequestBody Dispense dispense) {
-        Dispense updatedDispense = dispenseService.confirmDispense(dispense);
+    public ResponseEntity<Dispense> confirmDispense(@RequestBody DispenseConfirmationRequest request) {
+        Dispense updatedDispense = dispenseService.confirmDispense(request.getDispense(), request.getNurse());
         return ResponseEntity.ok(updatedDispense);
     }
 
@@ -59,4 +61,16 @@ public class DispenseController {
         List<Dispense> nonDispensed = dispenseService.findAllNonDispensed();
         return ResponseEntity.ok(nonDispensed);
     }
+
+
+
+
+    @PostMapping("/generateDispenses")
+    public ResponseEntity<?> generateDispenses() {
+        dispenseGenerationService.generateBreakfastDispenses();
+        dispenseGenerationService.generateLunchDispenses();
+        dispenseGenerationService.generateDinnerDispenses();
+        return ResponseEntity.ok("Dispenses generated");
+    }
 }
+

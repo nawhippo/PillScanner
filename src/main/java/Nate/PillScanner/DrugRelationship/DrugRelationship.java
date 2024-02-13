@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -18,8 +20,8 @@ public class DrugRelationship {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column
-    String meal;
+    @ElementCollection
+    List<String> meals;
 
     @Column
     Long camperId;

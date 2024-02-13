@@ -32,7 +32,6 @@ public class DrugRelationshipService {
     }
 
     public DrugRelationship updateDrugRelationship(DrugRelationship drugRelationship) {
-        dispenseService.createDispense(drugRelationship);
         return drugRelationshipRepository.save(drugRelationship);
     }
 

@@ -18,27 +18,26 @@ public class DispenseManagementService {
         this.alertRepository = alertRepository;
     }
 
-    @Scheduled(cron = "0 0 10 * * *") // 10 AM for Breakfast
+    @Scheduled(cron = "0 0 10 * * *")
     @Transactional
     public void markMissedBreakfasts() {
         markMissedDispenses("Breakfast");
     }
 
-    @Scheduled(cron = "0 0 14 * * *") // 2 PM for Lunch
+    @Scheduled(cron = "0 0 14 * * *")
     @Transactional
     public void markMissedLunches() {
         markMissedDispenses("Lunch");
     }
 
-    @Scheduled(cron = "0 0 19 * * *") // 7 PM for Dinner
+    @Scheduled(cron = "0 0 19 * * *")
     @Transactional
     public void markMissedDinners() {
         markMissedDispenses("Dinner");
     }
 
-    private void markMissedDispenses(String mealType) {
+    public void markMissedDispenses(String mealType) {
         LocalDateTime now = LocalDateTime.now();
-        // Assume findMissableDispensesForMealType is modified to accept a String for mealType
         List<Dispense> missableDispenses = dispenseRepository.findMissableDispensesForMealType(mealType, now);
 
         missableDispenses.forEach(dispense -> {

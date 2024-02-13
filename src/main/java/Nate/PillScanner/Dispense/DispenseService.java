@@ -6,12 +6,15 @@ import Nate.PillScanner.Drug.Drug;
 import Nate.PillScanner.Drug.DrugRepository;
 import Nate.PillScanner.Drug.DrugService;
 import Nate.PillScanner.DrugRelationship.DrugRelationship;
+import Nate.PillScanner.Nurse.Nurse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -57,23 +60,17 @@ public class DispenseService {
     }
 
 
-    public Dispense createDispense(DrugRelationship drugRelationship) {
-        Dispense dispense = new Dispense();
-        Drug drug = drugService.findDrugById(drugRelationship.getDrugId())
-                .orElseThrow(() -> new NoSuchElementException("Drug not found"));
-        dispense.setDrugId(drug.getId());
-        dispense.setMeal(drugRelationship.getMeal());
-        dispense.setQuantity(drugRelationship.getQuantity());
-        dispense.setDispensed(false);
-        return saveDispense(dispense);
-    }
 
-    public Dispense confirmDispense(Dispense dispense) {
+    public Dispense confirmDispense(Dispense dispense, Nurse nurse) {
         Drug drug = drugRepository.findById(dispense.getDrugId())
                 .orElseThrow(() -> new NoSuchElementException("Drug not found"));
         drug.setSupply(drug.getSupply() - dispense.getQuantity());
         dispense.setDispensed(true);
-        dispense.setDispenseTime(LocalDateTime.now());
+        dispense.setNurseId(nurse.getId());
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString = dateFormat.format(date);
+        dispense.setTime(dateString);
         drugRepository.save(drug);
         if(drug.getSupply() <= 25){
             Alert alert = new Alert();

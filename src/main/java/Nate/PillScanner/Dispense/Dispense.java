@@ -1,13 +1,14 @@
 package Nate.PillScanner.Dispense;
 
+import Nate.PillScanner.Nurse.Nurse;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -23,10 +24,13 @@ public class Dispense {
     private Long drugId;
 
     @Column
+    private Long camperId;
+
+    @Column
     private String meal;
 
     @Column
-    private LocalDateTime dispenseTime;
+    private Long nurseId;
 
     @Column
     private Long quantity;
@@ -36,4 +40,7 @@ public class Dispense {
 
     @Column
     private boolean missed;
+
+    @Column
+    private String time;
 }
