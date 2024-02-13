@@ -57,7 +57,6 @@ public class DispenseGenerationService {
             newDispense.setQuantity(drug.getQuantity());
             newDispense.setMeal(mealType);
             newDispense.setCamperId(drug.getCamperId());
-            newDispense.setDispenseTime(LocalDateTime.now());
             newDispense.setMissed(false);
 
             dispenseRepository.save(newDispense);
