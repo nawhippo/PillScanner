@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers("/login","/error", "/logout", "/nurse/createNurse").permitAll()
-                .anyRequest().hasRole("USER")
+                .anyRequest().authenticated()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
