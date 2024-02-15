@@ -13,4 +13,4 @@ FROM eclipse-temurin:17-jre
 
 COPY --from=builder /app/target/*.jar app.jar
 
-ENTRYPOINT ["sh", "-c", "java -Dserver.port=$PORT -jar /app.jar"]
+ENTRYPOINT ["sh", "-c", "env && java -Dserver.port=$PORT -jar /app.jar"]
