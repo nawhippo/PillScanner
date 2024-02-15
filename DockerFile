@@ -1,5 +1,5 @@
 FROM maven:3.8.4-openjdk-17 as builder
-COPY . .
+COPY src/main/java/Nate/PillScanner .
 RUN mvn -e -X package
 
 
