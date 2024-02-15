@@ -33,8 +33,8 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .authorizeRequests()
-//                .requestMatchers("/login","/error", "/logout", "/nurse/createNurse").permitAll()
-//                .anyRequest().hasRole("USER")
+                .requestMatchers("/login","/error", "/logout", "/nurse/createNurse").permitAll()
+                .anyRequest().hasRole("USER")
                 .anyRequest().permitAll()
                 .and()
                 .logout()
@@ -51,7 +51,7 @@ public class SecurityConfig {
 
         http.cors().configurationSource(request -> {
             var cors = new org.springframework.web.cors.CorsConfiguration();
-            cors.setAllowedOrigins(java.util.List.of("http://localhost:3000"));
+            cors.setAllowedOrigins(java.util.List.of("https://pillscanner-frontend.onrender.com/"));
             cors.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             cors.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type", "Accept"));
             cors.setAllowCredentials(true);
