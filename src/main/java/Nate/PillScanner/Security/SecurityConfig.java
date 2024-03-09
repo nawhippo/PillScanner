@@ -34,6 +34,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    //shouldn't be able to access anything except gets unless you are logged in.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

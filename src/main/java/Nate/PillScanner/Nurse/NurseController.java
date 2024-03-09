@@ -27,6 +27,7 @@ public class NurseController {
         Nurse savedNurse = nurseService.saveNurse(nurse);
         return new ResponseEntity<>(savedNurse, HttpStatus.CREATED);
     }
+    //no point in having functionality here
 //
 //    @DeleteMapping("/deleteNurse")
 //    public ResponseEntity<Void> deleteNurse(@RequestBody Nurse nurse) {

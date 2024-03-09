@@ -12,6 +12,7 @@ import java.io.IOException;
 
 
 public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
+    //jwt token verification on each http request
 
         private JwtUtil jwtUtil;
         private NurseUserDetailsService nurseUserDetailsService;
