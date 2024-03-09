@@ -29,7 +29,7 @@ public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
             String username = null;
             String jwt = null;
             //bypass jwt process
-            if (path.equals("/login") || path.equals("*/logout") || path.equals("/nurse/createNurse")) {
+            if (path.matches(".*/login") || path.matches(".*/logout") || path.equals("/nurse/createNurse")) {
                 filterChain.doFilter(request, response);
                 return;
             }

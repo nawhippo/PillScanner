@@ -2,6 +2,7 @@ package Nate.PillScanner.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,8 +19,15 @@ public class SecurityConfig {
     @Autowired
     private NurseAuthenticationProvider authProvider;
 
+    @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
     private NurseUserDetailsService nurseUserDetailsService;
+
+    @Bean
+    public CustomTokenAuthenticationFilter customTokenAuthenticationFilter() {
+        return new CustomTokenAuthenticationFilter(jwtUtil, nurseUserDetailsService);
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -31,6 +39,8 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                //for demo purposes
+                .requestMatchers(HttpMethod.GET, "/**").permitAll()
                 .requestMatchers("/login","/error", "/logout", "/nurse/createNurse").permitAll()
                 .anyRequest().authenticated()
                 .and()

@@ -8,10 +8,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class LoginController {
@@ -22,6 +25,9 @@ public class LoginController {
     @Autowired
     private NurseRepository nurseRepository;
 
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
@@ -37,7 +43,12 @@ public class LoginController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nurse not found");
         }
 
-        return ResponseEntity.ok(nurse);
+        final String jwt = jwtUtil.generateToken((UserDetails) authentication.getPrincipal());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", nurse);
+        response.put("jwt", jwt);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/logout")
