@@ -29,6 +29,7 @@ public class LoginController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    //returns user and jwt info
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
