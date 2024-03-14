@@ -59,7 +59,7 @@ public class SecurityConfig {
 
         http.cors().configurationSource(request -> {
             var cors = new org.springframework.web.cors.CorsConfiguration();
-            cors.setAllowedOrigins(java.util.List.of("https://pillscanner-frontend.onrender.com/"));
+            cors.setAllowedOrigins(java.util.List.of("https://pillscanner-frontend.onrender.com"));
             cors.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             cors.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type", "Accept"));
             cors.setAllowCredentials(true);
