@@ -1,0 +1,1 @@
+Pillscanner is an application prototype designed and presented the Culver Summer Schools and Camps Health Center. It's purpose is to track perscriptions among campers and generate notifications for dispensing medications at one of three meal distribution times. It also has a camper address book, shipment log, as well as medication information base.
